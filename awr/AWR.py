@@ -159,16 +159,19 @@ if __name__ == '__main__':
                 allocate_rewards(tmpQue, D, gamma = gamma)
                 train(Pi, V, D, gamma=gamma, beta=beta)
         if k % 100 == 0:
-            done = False
-            score = 0
-            state = env.reset()
-            state = np.reshape(state, [1, 4])
-            while not done:
-                trajectories = Pi(state).numpy().flatten()
-                action = np.argmax(trajectories)
-                next_state, reward, done, info = env.step(action)
-                env.render()
-                state = np.reshape(next_state, [1, 4])
-                score += reward
-            print(f"[testing] the score is {score}")
+            ts = 0
+            for e in range(20):
+                done = False
+                score = 0
+                state = env.reset()
+                state = np.reshape(state, [1, 4])
+                while not done:
+                    trajectories = Pi(state).numpy().flatten()
+                    action = np.argmax(trajectories)
+                    next_state, reward, done, info = env.step(action)
+                    env.render()
+                    state = np.reshape(next_state, [1, 4])
+                    score += reward
+                ts += score
+            print(f"[testing] the score is {ts / 20}")
 
